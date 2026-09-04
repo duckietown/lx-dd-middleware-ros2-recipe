@@ -1,0 +1,5 @@
+# Exercise settings file
+
+matrix:
+  map: "sandbox_drone"
+  vehicle: "map_0/vehicle_0"

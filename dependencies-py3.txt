@@ -1,0 +1,10 @@
+# colcon build system
+colcon-common-extensions==0.3.0
+osrf-pycommon==2.0.2
+
+# notebook dependencies
+numpy
+ipywidgets
+ipympl
+matplotlib
+pyyaml

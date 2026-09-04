@@ -1,0 +1,8 @@
+# ROS2 Jazzy base packages
+ros-jazzy-ros-base
+ros-jazzy-rclpy
+ros-jazzy-std-msgs
+ros-jazzy-sensor-msgs
+
+# colcon build tools
+python3-colcon-common-extensions

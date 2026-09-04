@@ -1,0 +1,7 @@
+name: "lx-dd-middleware-ros2-recipe"
+maintainer:
+    name: "Duckietown"
+    email: "info@duckietown.com"
+description: "Recipe for the DD24 ROS2 Middleware Learning Experience"
+version: 0.0.0
+icon: cube
