@@ -4,7 +4,8 @@ osrf-pycommon==2.0.2
 
 # notebook dependencies
 numpy
-ipywidgets
+# The bundled Jupyter renderer supports the ipywidgets 7 widget protocol.
+ipywidgets<8
 ipympl
 matplotlib
 pyyaml
