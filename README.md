@@ -20,9 +20,40 @@ Learners do not clone this repository. The Duckietown Shell pulls it automatical
 | --- | --- |
 | `Dockerfile` | image that runs the LX code on a Duckiedrone |
 | `Dockerfile.vscode` | image behind `dts code editor`, the browser editor the learner works in |
-| `dependencies-apt.txt`, `dependencies-py3.txt` | packages installed into those images |
-| `dependencies-apt.vscode.txt` | extra APT packages for the editor image only |
+| `dependencies-apt.txt`, `dependencies-py3.txt` | runtime APT packages and Python packages shared by both images |
+| `dependencies-apt.vscode.txt` | ROS 2 and colcon APT packages for the editor image |
 | `launchers/default.sh` | what runs when the LX container starts |
 | `settings.yaml` | Duckiematrix map and vehicle used by `dts code start_matrix` |
-| `assets/vscode/setup.sh` | code-server tweaks (open the README, enable Jupyter widgets) |
+| `assets/vscode/setup.sh` | code-server settings, ROS-enabled terminals, and writable build directories |
 | `packages/` | instructor-only code, hidden from the learner |
+
+## Browser-terminal environment
+
+The editor image uses Ubuntu 24.04 (Noble) with ROS 2 Jazzy. Its Dockerfile installs
+the official ROS 2 APT-source package before the editor dependencies and checks
+that the base image is still Noble.
+
+New Bash terminals load ROS 2 and, when present, the built workspace overlay.
+The image sets `ROS2_DISTRO=jazzy`, `COLCON_WS=/code`, and `ROS_DOMAIN_ID=42`.
+The editor user can write to `/code/build`, `/code/install`, and `/code/log`;
+the LX source is mounted below `/code/src`.
+
+To test local recipe changes, check out this repository beside the LX repository
+and run this command from the LX directory. It rebuilds and opens the editor
+using the local recipe instead of the remote recipe branch:
+
+    dts code editor --recipe ../lx-dd-middleware-ros2-recipe
+
+In the browser editor, choose **Terminal > New Terminal** and check the local
+interface and package workflow:
+
+    ros2 interface show sensor_msgs/msg/CompressedImage
+    ros2 interface show sensor_msgs/msg/Imu
+    cd "$COLCON_WS"
+    colcon list
+    colcon build --packages-select ros2_pubsub
+    source install/setup.bash
+    ros2 pkg executables ros2_pubsub
+
+Open another terminal to check that it finds the built package automatically.
+Terminals already open before a build still need to source `install/setup.bash`.
