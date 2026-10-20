@@ -39,9 +39,23 @@ RUN mkdir -p "${REPO_PATH}"
 WORKDIR "${REPO_PATH}"
 
 # make code-server open the LX folder by default
-ENV VSCODE_PATH="${REPO_PATH}"
+ENV VSCODE_PATH="${REPO_PATH}" \
+    ROS2_DISTRO=jazzy \
+    COLCON_WS=/code \
+    ROS_DOMAIN_ID=42 \
+    LANG=C.UTF-8
 
 # install apt dependencies
+ARG ROS_APT_SOURCE_VERSION=1.3.0
+ARG ROS_APT_SOURCE_SHA256=f31d84adf5054c7d60ded0e82c0f776a77ea33af53d08f40b9ad7c94cca55296
+RUN . /etc/os-release && \
+    test "${VERSION_CODENAME}" = noble && \
+    curl --fail --location --silent --show-error \
+        "https://github.com/ros-infrastructure/ros-apt-source/releases/download/${ROS_APT_SOURCE_VERSION}/ros2-apt-source_${ROS_APT_SOURCE_VERSION}.${VERSION_CODENAME}_all.deb" \
+        --output /tmp/ros2-apt-source.deb && \
+    echo "${ROS_APT_SOURCE_SHA256}  /tmp/ros2-apt-source.deb" | sha256sum --check - && \
+    dpkg --install /tmp/ros2-apt-source.deb && \
+    rm /tmp/ros2-apt-source.deb
 COPY --from=recipe ./dependencies-apt.vscode.txt "/tmp/"
 RUN dt-apt-install /tmp/dependencies-apt.vscode.txt
 
@@ -72,3 +86,8 @@ LABEL org.duckietown.label.module.type="exercise-vscode" \
 # setup vscode
 COPY --from=recipe assets/vscode/setup.sh /tmp/vscode_setup.sh
 RUN chmod +x /tmp/vscode_setup.sh && /tmp/vscode_setup.sh
+
+# Prepare generated workspace output for the user chosen by dt-vscode at runtime.
+COPY --from=recipe assets/vscode/launch.sh /usr/local/bin/dt-launcher-ros2-vscode
+RUN chmod +x /usr/local/bin/dt-launcher-ros2-vscode
+ENV DT_LAUNCHER=ros2-vscode
