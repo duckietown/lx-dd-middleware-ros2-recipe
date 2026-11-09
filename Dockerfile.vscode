@@ -42,7 +42,6 @@ WORKDIR "${REPO_PATH}"
 ENV VSCODE_PATH="${REPO_PATH}" \
     ROS2_DISTRO=jazzy \
     COLCON_WS=/code \
-    ROS_DOMAIN_ID=42 \
     LANG=C.UTF-8
 
 # install apt dependencies
