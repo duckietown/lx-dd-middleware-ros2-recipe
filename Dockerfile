@@ -78,9 +78,6 @@ RUN . /opt/ros/${ROS2_DISTRO}/setup.sh && \
 COPY --from=recipe ./launchers/. "${LAUNCH_PATH}/"
 RUN dt-install-launchers "${LAUNCH_PATH}"
 
-# TODO: move upstream to dt-ros2-commons
-ENV ROS_DOMAIN_ID=42
-
 # define default command
 CMD ["bash", "-c", "dt-launcher-${DT_LAUNCHER}"]
 
