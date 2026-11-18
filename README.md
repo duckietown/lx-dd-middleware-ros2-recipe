@@ -34,7 +34,7 @@ the official ROS 2 APT-source package before the editor dependencies and checks
 that the base image is still Noble.
 
 New Bash terminals load ROS 2 and, when present, the built workspace overlay.
-The image sets `ROS2_DISTRO=jazzy`, `COLCON_WS=/code`, and `ROS_DOMAIN_ID=42`.
+The image sets `ROS2_DISTRO=jazzy` and `COLCON_WS=/code`.
 The editor user can write to `/code/build`, `/code/install`, and `/code/log`;
 the LX source is mounted below `/code/src`.
 
